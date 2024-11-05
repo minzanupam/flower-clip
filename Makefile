@@ -4,7 +4,11 @@ build:
 run:
 	@go run cmd/main.go
 
-dev:
-	@tailwindcss -w -i src/templates/main.css -o assets/main.css &
+air:
+	@air &
+templ:
 	@templ generate -watch src/templates &
-	@air
+tailwind:
+	@tailwindcss -w -i src/templates/main.css -o assets/main.css
+
+dev: templ air tailwind
