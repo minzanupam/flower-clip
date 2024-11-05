@@ -9,5 +9,6 @@
 # Required tools
 - go
 - air
-- templ (not added)
+- templ
+- tailwindcss
 - postgres (not added)
