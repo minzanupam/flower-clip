@@ -3,11 +3,13 @@ package routing
 import (
 	"log"
 	"net/http"
+
+	"app.flower.clip/src/templates"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello world"))
-	return
+	component := templates.Hello("Tarnished")
+	component.Render(r.Context(), w)
 }
 
 func LoggingMiddleware(next http.Handler) http.Handler {
