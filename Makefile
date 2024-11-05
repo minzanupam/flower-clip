@@ -5,4 +5,5 @@ run:
 	@go run cmd/main.go
 
 dev:
+	@templ generate -watch src/templates &
 	@air
