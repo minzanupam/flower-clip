@@ -21,6 +21,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 func StartServer() error {
 	mux := http.NewServeMux()
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("GET /", rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))
