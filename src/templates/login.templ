@@ -2,10 +2,14 @@ package templates
 
 templ LoginPage() {
 	@Base() {
-		<form hx-post="/login" method="POST">
-			<label>email <input type="email" name="email"> </label>
-			<label>password <input type="password" name="password"> </label>
-			<button>login</button>
+		<form hx-post="/login" method="POST" class="flex flex-col gap-4 max-w-screen-md p-2">
+			<label class="flex flex-col gap-2"><span class="capitalize">email</span>
+				<input type="email" name="email" class="border rounded py-1">
+			</label>
+			<label class="flex flex-col gap-2"><span class="capitalize">password</span>
+				<input type="password" name="password" class="border rounded py-1">
+			</label>
+			<button class="bg-blue-500 px-2 py-1 rounded light:text-white">login</button>
 		</form>
 	}
 }
