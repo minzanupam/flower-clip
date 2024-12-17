@@ -8,7 +8,7 @@ import (
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	component := templates.Hello("Tarnished")
+	component := templates.IndexPage()
 	component.Render(r.Context(), w)
 }
 
