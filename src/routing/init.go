@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -19,11 +20,15 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+type Service struct {
+	DB *sql.DB
+}
+
 func StartServer() error {
 	mux := http.NewServeMux()
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("GET /login", loginPageHandler)
-	mux.HandleFunc("POST /login", loginApiHandler)
+	mux.HandleFunc("POST /login", s.loginApiHandler)
 	mux.HandleFunc("GET /", rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))
