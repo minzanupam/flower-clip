@@ -11,4 +11,4 @@ templ:
 tailwind:
 	@tailwindcss -w -i src/templates/main.css -o assets/main.css
 
-dev: templ air tailwind
+dev: templ air
