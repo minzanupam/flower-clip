@@ -2,7 +2,22 @@ package templates
 
 templ SignupPage() {
 	@Base() {
-		<form method="POST" action="/signup">
+		<style>
+.signup-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	margin: 1rem;
+	max-width: 640px;
+}
+.signup-form > label {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+		</style>
+		<form method="POST" action="/signup" class="signup-form">
 			<label>name <input type="text" name="name"> </label>
 			<label>email <input type="email" name="email"> </label>
 			<label>password <input type="password" name="password"> </label>
