@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"app.flower.clip/src/templates"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +27,12 @@ type Service struct {
 
 func StartServer() error {
 	mux := http.NewServeMux()
+	db, err := sql.Open("sqlite3", "test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
 	s := Service{
-		DB: nil,
+		DB: db,
 	}
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("GET /login", loginPageHandler)
