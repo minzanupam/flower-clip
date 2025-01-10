@@ -1,0 +1,13 @@
+package templates 
+
+templ SignupPage() {
+	@Base() {
+		<form method="POST" action="/signup">
+			<label>name <input type="text" name="name"> </label>
+			<label>email <input type="email" name="email"> </label>
+			<label>password <input type="password" name="password"> </label>
+			<a href="/login">alread signup login here</a>
+			<button>sigunp</button>
+		</form>
+	}
+}

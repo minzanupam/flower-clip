@@ -26,9 +26,14 @@ type Service struct {
 
 func StartServer() error {
 	mux := http.NewServeMux()
+	s := Service{
+		DB: nil,
+	}
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("GET /login", loginPageHandler)
 	mux.HandleFunc("POST /login", s.loginApiHandler)
+	mux.HandleFunc("GET /signup", signupPageHandler)
+	mux.HandleFunc("POST /signup", s.signupApiHandler)
 	mux.HandleFunc("GET /", rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))

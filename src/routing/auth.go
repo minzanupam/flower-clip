@@ -1,8 +1,8 @@
 package routing
 
 import (
-	"net/http"
 	"app.flower.clip/src/templates"
+	"net/http"
 )
 
 func loginPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,4 +28,12 @@ func (s *Service) loginApiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create and authenticate
+}
+
+func signupPageHandler(w http.ResponseWriter, r *http.Request) {
+	component := templates.SignupPage()
+	component.Render(r.Context(), w)
+}
+
+func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
 }
