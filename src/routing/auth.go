@@ -31,7 +31,8 @@ func (s *Service) loginApiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	row := s.DB.QueryRow(`SELECT id, password FROM users WHERE email = ?`, req_email)
 	var hashedPasword string
-	err := row.Scan(&hashedPasword)
+	var userID int
+	err := row.Scan(&userID, &hashedPasword)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -57,6 +58,7 @@ func (s *Service) loginApiHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	session.Values["user_id"] = userID
 	if err = session.Save(r, w); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
