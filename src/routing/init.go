@@ -57,6 +57,7 @@ func StartServer() error {
 	mux.HandleFunc("POST /login", s.loginApiHandler)
 	mux.HandleFunc("GET /signup", signupPageHandler)
 	mux.HandleFunc("POST /signup", s.signupApiHandler)
+	mux.HandleFunc("GET /profile", s.profilePageHandler)
 	mux.HandleFunc("GET /", rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))

@@ -19,13 +19,28 @@ templ LoginPage() {
 		</style>
 		<form hx-post="/login" method="POST" class="login-form">
 			<label class="flex flex-col gap-2"><span class="">email</span>
-				<input type="email" name="email" class="">
+				<input type="email" name="email" class="" />
 			</label>
 			<label class="flex flex-col gap-2"><span class="">password</span>
-				<input type="password" name="password" class="">
+				<input type="password" name="password" class="" />
 			</label>
 			<a href="/signup">don't have a password signup</a>
 			<button class="">login</button>
 		</form>
+	}
+}
+
+templ ProfilePage(user_fullname string, user_email string) {
+	@Base() {
+		<style>
+			.container {
+				padding: 2rem;
+			}
+		</style>
+		<main class="container">
+			<div>{user_fullname}</div>
+			<div>{user_email}</div>
+			<a href="/logout">logout</a>
+		</main>
 	}
 }

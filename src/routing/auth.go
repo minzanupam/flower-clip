@@ -144,3 +144,23 @@ func authenticate(r *http.Request, store *sqlitestore.SqliteStore) (int, error) 
 	}
 	return userID, nil
 }
+
+func (s *Service) profilePageHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("please login before continuing"))
+		return
+	}
+	row := s.DB.QueryRow(`SELECT fullname, email FROM users WHERE id = ?`, userID)
+	var userFullname, userEmail string
+	if err = row.Scan(&userFullname, &userEmail); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("please login before continuing"))
+		return
+	}
+	component := templates.ProfilePage(userFullname, userEmail)
+	component.Render(r.Context(), w)
+}
