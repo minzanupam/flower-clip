@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"app.flower.clip/src/templates"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -26,6 +27,9 @@ type Service struct {
 }
 
 func StartServer() error {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal(err)
+	}
 	mux := http.NewServeMux()
 	db, err := sql.Open("sqlite3", "test.db")
 	if err != nil {
