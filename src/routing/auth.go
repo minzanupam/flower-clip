@@ -1,11 +1,13 @@
 package routing
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"app.flower.clip/src/templates"
 	"github.com/gorilla/sessions"
+	"github.com/michaeljs1990/sqlitestore"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -126,4 +128,19 @@ func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("server error"))
 		return
 	}
+}
+
+func authenticate(r *http.Request, store *sqlitestore.SqliteStore) (int, error) {
+	session, err := store.Get(r, "auth-store")
+	if err != nil {
+		log.Println(err)
+		return 0, err
+	}
+	userID, ok := session.Values["user_id"].(int)
+	if !ok {
+		err = fmt.Errorf("incorrect type for user_id")
+		log.Println(err)
+		return 0, err
+	}
+	return userID, nil
 }
