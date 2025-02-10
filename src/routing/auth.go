@@ -1,8 +1,11 @@
 package routing
 
 import (
-	"app.flower.clip/src/templates"
+	"log"
 	"net/http"
+
+	"app.flower.clip/src/templates"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func loginPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -36,4 +39,36 @@ func signupPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
+	req_fullname := r.FormValue("fullname")
+	req_email := r.FormValue("email")
+	req_password := r.FormValue("password")
+	if req_fullname == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("error fullname not found"))
+		return
+	}
+	if req_email == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("error fullname not found"))
+		return
+	}
+	if req_password == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("error fullname not found"))
+		return
+	}
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req_password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("server error"))
+		return
+	}
+	_, err = s.DB.Exec(`INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)`, req_fullname, req_email, string(passwordHash))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte("server error"))
+		return
+	}
 }
