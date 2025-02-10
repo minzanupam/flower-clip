@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"app.flower.clip/src/templates"
+	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -64,10 +65,31 @@ func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("server error"))
 		return
 	}
-	_, err = s.DB.Exec(`INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)`, req_fullname, req_email, string(passwordHash))
+	res, err := s.DB.Exec(`INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)`, req_fullname, req_email, string(passwordHash))
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte("server error"))
+		return
+	}
+
+	var session *sessions.Session
+	session, err = s.Store.Get(r, "auth-store")
+	if err != nil {
+		log.Println(err)
+		session, err = s.Store.New(r, "auth-store")
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("server error"))
+			return
+		}
+	}
+	userid, err := res.LastInsertId()
+	session.Values["user_id"] = int(userid)
+	if err = session.Save(r, w); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("server error"))
 		return
 	}
