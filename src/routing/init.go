@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 
 	"app.flower.clip/src/templates"
 	"github.com/joho/godotenv"
@@ -30,8 +31,12 @@ func StartServer() error {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Fatal(err)
 	}
+	db_name := os.Getenv("DATABASE_URL")
+	if db_name == "" {
+		log.Fatal("DATABASE_URL not found in .env")
+	}
 	mux := http.NewServeMux()
-	db, err := sql.Open("sqlite3", "test.db")
+	db, err := sql.Open("sqlite3", db_name)
 	if err != nil {
 		log.Fatal(err)
 	}
