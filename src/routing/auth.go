@@ -15,23 +15,54 @@ func loginPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Service) loginApiHandler(w http.ResponseWriter, r *http.Request) {
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-	row := s.DB.QueryRow(`SELECT id, password FROM users WHERE email = ?`, email)
-	var dbPassword string
-	err := row.Scan(&dbPassword)
+	req_email := r.FormValue("email")
+	req_password := r.FormValue("password")
+	if req_email == "" {
+		log.Println("null email")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("email is null"))
+		return
+	}
+	if req_password == "" {
+		log.Println("null password")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("password is null"))
+		return
+	}
+	row := s.DB.QueryRow(`SELECT id, password FROM users WHERE email = ?`, req_email)
+	var hashedPasword string
+	err := row.Scan(&hashedPasword)
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("email not found: user does not exist"))
 		return
 	}
-	if password != dbPassword {
+	if err = bcrypt.CompareHashAndPassword([]byte(hashedPasword), []byte(req_password)); err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("incorrect username or password"))
+		w.Write([]byte("incorrect email or password"))
 		return
 	}
 
-	// create and authenticate
+	var session *sessions.Session
+	session, err = s.Store.Get(r, "auth-store")
+	if err != nil {
+		log.Println(err)
+		session, err = s.Store.New(r, "auth-store")
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("server error"))
+			return
+		}
+	}
+	if err = session.Save(r, w); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("server error"))
+		return
+	}
 }
 
 func signupPageHandler(w http.ResponseWriter, r *http.Request) {
