@@ -1,6 +1,6 @@
 package templates
 
-templ Base() {
+templ Base(authenticated bool) {
 	<!doctype html>
 	<html>
 	<head>
@@ -15,7 +15,11 @@ templ Base() {
 	<body class="font-sans">
 		<nav>
 			<a href="/" class="underline">home</a>
-			<a href="/login" class="underline">login</a>
+			if authenticated {
+				<a href="/profile" class="underline">profile</a>
+			} else {
+				<a href="/login" class="underline">login</a>
+			}
 		</nav>
 		{ children... }
 	</body>

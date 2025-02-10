@@ -1,7 +1,7 @@
 package templates
 
 templ LoginPage() {
-	@Base() {
+	@Base(false) {
 		<style>
 			.login-form {
 				display: flex;
@@ -31,7 +31,7 @@ templ LoginPage() {
 }
 
 templ ProfilePage(user_fullname string, user_email string) {
-	@Base() {
+	@Base(false) {
 		<style>
 			.container {
 				padding: 2rem;
