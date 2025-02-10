@@ -9,6 +9,7 @@ import (
 	"app.flower.clip/src/templates"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/michaeljs1990/sqlitestore"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +25,8 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 }
 
 type Service struct {
-	DB *sql.DB
+	DB    *sql.DB
+	Store *sqlitestore.SqliteStore
 }
 
 func StartServer() error {
@@ -40,8 +42,15 @@ func StartServer() error {
 	if err != nil {
 		log.Fatal(err)
 	}
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	sessionDb := os.Getenv("SESSION_DB")
+	store, err := sqlitestore.NewSqliteStore(sessionDb, "sessions", "/", 3600, []byte(sessionSecret))
+	if err != nil {
+		panic(err)
+	}
 	s := Service{
-		DB: db,
+		DB:    db,
+		Store: store,
 	}
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("GET /login", loginPageHandler)
