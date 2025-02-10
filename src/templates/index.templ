@@ -1,7 +1,7 @@
 package templates
 
-templ IndexPage() {
-	@Base(false) {
+templ IndexPage(authenticated bool) {
+	@Base(authenticated) {
 		<h1>this is the index page</h1>
 	}
 }

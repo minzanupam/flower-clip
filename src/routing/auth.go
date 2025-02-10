@@ -11,8 +11,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func loginPageHandler(w http.ResponseWriter, r *http.Request) {
-	component := templates.LoginPage()
+func (s *Service) loginPageHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+	}
+	authenticated := false
+	if userID != 0 {
+		authenticated = true
+	}
+	component := templates.LoginPage(authenticated)
 	component.Render(r.Context(), w)
 }
 

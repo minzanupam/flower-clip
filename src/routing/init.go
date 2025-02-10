@@ -12,8 +12,16 @@ import (
 	"github.com/michaeljs1990/sqlitestore"
 )
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	component := templates.IndexPage()
+func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+	}
+	authenticated := false
+	if userID != 0 {
+		authenticated = true
+	}
+	component := templates.IndexPage(authenticated)
 	component.Render(r.Context(), w)
 }
 
@@ -53,12 +61,12 @@ func StartServer() error {
 		Store: store,
 	}
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	mux.HandleFunc("GET /login", loginPageHandler)
+	mux.HandleFunc("GET /login", s.loginPageHandler)
 	mux.HandleFunc("POST /login", s.loginApiHandler)
 	mux.HandleFunc("GET /signup", signupPageHandler)
 	mux.HandleFunc("POST /signup", s.signupApiHandler)
 	mux.HandleFunc("GET /profile", s.profilePageHandler)
-	mux.HandleFunc("GET /", rootHandler)
+	mux.HandleFunc("GET /", s.rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))
 }
