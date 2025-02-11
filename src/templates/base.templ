@@ -4,8 +4,35 @@ templ Base(authenticated bool) {
 	<!doctype html>
 	<html>
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+	:root {
+		color-scheme: light dark;
+	}
+	</style>
+	</head>
+	<body class="font-sans">
+		<nav>
+			<a href="/" class="underline">home</a>
+			if authenticated {
+				<a href="/profile" class="underline">profile</a>
+			} else {
+				<a href="/login" class="underline">login</a>
+			}
+		</nav>
+		{ children... }
+	</body>
+	</html>
+}
+
+templ BaseHTMX(authenticated bool) {
+	<!doctype html>
+	<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="/assets/htmx.min.js" defer></script>
 	<style>
 	:root {
 		color-scheme: light dark;

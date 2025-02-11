@@ -1,7 +1,15 @@
 package templates
 
 templ IndexPage(authenticated bool) {
-	@Base(authenticated) {
-		<h1>this is the index page</h1>
+	@BaseHTMX(authenticated) {
+		<h1>Project Flower Clip @ minzify.xyz</h1>
+		<div>
+			<form method="POST" action="/svg/upload">
+				<label>
+					upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
+				</label>
+				<button>upload</button>
+			</form>
+		</div>
 	}
 }
