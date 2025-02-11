@@ -4,7 +4,7 @@ templ IndexPage(authenticated bool) {
 	@BaseHTMX(authenticated) {
 		<h1>Project Flower Clip @ minzify.xyz</h1>
 		<div>
-			<form hx-post="/svg/upload" hx-encoding="multipart/form-data">
+			<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="none">
 				<label>
 					upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
 				</label>
