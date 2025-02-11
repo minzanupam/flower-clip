@@ -40,7 +40,9 @@ templ ProfilePage(user_fullname string, user_email string) {
 		<main class="container">
 			<div>{user_fullname}</div>
 			<div>{user_email}</div>
-			<a href="/logout">logout</a>
+			<form method="POST" action="/logout">
+				<button>logout</button>
+			</form>
 		</main>
 	}
 }

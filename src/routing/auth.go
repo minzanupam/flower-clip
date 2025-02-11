@@ -176,3 +176,16 @@ func (s *Service) profilePageHandler(w http.ResponseWriter, r *http.Request) {
 	component := templates.ProfilePage(userFullname, userEmail)
 	component.Render(r.Context(), w)
 }
+
+func (s *Service) logoutApiHandler(w http.ResponseWriter, r *http.Request) {
+	defer http.Redirect(w, r, "/", http.StatusFound)
+
+	session, err := s.Store.Get(r, "auth-store")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	if s.Store.Delete(r, w, session); err != nil {
+		log.Println(err)
+	}
+}
