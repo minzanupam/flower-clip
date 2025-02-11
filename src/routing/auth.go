@@ -142,19 +142,19 @@ func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func authenticate(r *http.Request, store *sqlitestore.SqliteStore) (int, error) {
+func authenticate(r *http.Request, store *sqlitestore.SqliteStore) (userID int, err error) {
 	session, err := store.Get(r, "auth-store")
 	if err != nil {
 		log.Println(err)
-		return 0, err
+		return
 	}
 	userID, ok := session.Values["user_id"].(int)
 	if !ok {
 		err = fmt.Errorf("incorrect type for user_id")
 		log.Println(err)
-		return 0, err
+		return
 	}
-	return userID, nil
+	return
 }
 
 func (s *Service) profilePageHandler(w http.ResponseWriter, r *http.Request) {
