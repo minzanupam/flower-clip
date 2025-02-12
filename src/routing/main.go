@@ -43,9 +43,7 @@ func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			continue
 		}
-		for i := 0; i < 100; i++ {
-			svgs = append(svgs, svg)
-		}
+		svgs = append(svgs, svg)
 	}
 	component := templates.IndexPage(authenticated, svgs)
 	component.Render(r.Context(), w)
