@@ -18,6 +18,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		<div>
 			for _, svg := range svgs {
 				<div>{svg.Name}</div>
+				@templ.Raw(string(svg.File))
 			}
 		</div>
 	}
