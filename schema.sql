@@ -9,7 +9,7 @@ CREATE TABLE users (
 CREATE TABLE svgs (
 	id INTEGER PRIMARY KEY autoincrement,
 	name TEXT NOT NULL,
-	file BLOB NOT NULL,
+	file TEXT NOT NULL,
 	created_at TEXT NOT NULL,
 	user_id INTEGER NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES users(id)

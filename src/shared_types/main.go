@@ -5,6 +5,6 @@ import "time"
 type SVG struct {
 	ID        int
 	Name      string
-	File      []byte
+	File      string
 	CreatedAt time.Time
 }

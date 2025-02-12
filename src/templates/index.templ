@@ -29,7 +29,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		<div class="svg-grid">
 			for _, svg := range svgs {
 				<div class="svg-container">
-					@templ.Raw(string(svg.File))
+					@templ.Raw(svg.File)
 					<div>{svg.Name}</div>
 				</div>
 			}

@@ -23,18 +23,19 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, fileHeader := range r.MultipartForm.File["svg-files"] {
 		uploadedFile, err := fileHeader.Open()
-		buf := make([]byte, 10<<20)
+		// buffer assumed to be 1 MB
+		buf := make([]byte, 1<<20)
 		bytecount, err := uploadedFile.Read(buf)
 		if err != nil {
 			log.Println(err)
 		}
-		if bytecount == 10<<20 {
+		if bytecount == 1<<20 {
 			log.Println("buffer for reading uploaded file is full")
 		}
 		createdAt := time.Now().Format(time.RFC3339)
 		res, err := s.DB.Exec(`INSERT INTO svgs (name, file,
 			created_at, user_id) VALUES (?, ?, ?, ?)`,
-			fileHeader.Filename, buf, createdAt, userID)
+			fileHeader.Filename, string(buf[0:bytecount+1]), createdAt, userID)
 		if err != nil {
 			log.Println(err)
 			w.Write([]byte("server error"))
