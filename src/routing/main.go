@@ -23,7 +23,7 @@ func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
 	if userID != 0 {
 		authenticated = true
 	}
-	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs`)
+	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs WHERE user_id = ?`, userID)
 	if err != nil {
 		log.Println(err)
 		w.Write([]byte("server error"))
