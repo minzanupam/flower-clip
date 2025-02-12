@@ -10,6 +10,7 @@ CREATE TABLE svgs (
 	id INTEGER PRIMARY KEY autoincrement,
 	name TEXT NOT NULL,
 	file BLOB NOT NULL,
-	created_at TEXT NOT NULL
-	-- add user identifier later
+	created_at TEXT NOT NULL,
+	user_id INTEGER NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id)
 );
