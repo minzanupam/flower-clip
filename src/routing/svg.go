@@ -7,6 +7,13 @@ import (
 )
 
 func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte("please login to upload"))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	// max memory for parse multipart form is 50 MB
 	if err := r.ParseMultipartForm(50 << 20); err != nil {
 		log.Println(err)
@@ -25,7 +32,9 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("buffer for reading uploaded file is full")
 		}
 		createdAt := time.Now().Format(time.RFC3339)
-		res, err := s.DB.Exec(`INSERT INTO svgs (name, file, created_at) VALUES (?, ?, ?)`, fileHeader.Filename, buf, createdAt)
+		res, err := s.DB.Exec(`INSERT INTO svgs (name, file,
+			created_at, user_id) VALUES (?, ?, ?, ?)`,
+			fileHeader.Filename, buf, createdAt, userID)
 		if err != nil {
 			log.Println(err)
 			w.Write([]byte("server error"))
