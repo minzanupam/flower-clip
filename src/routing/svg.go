@@ -10,15 +10,15 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 	userID, err := authenticate(r, s.Store)
 	if err != nil {
 		log.Println(err)
-		w.Write([]byte("please login to upload"))
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("please login before continuing"))
 		return
 	}
 	// max memory for parse multipart form is 50 MB
 	if err := r.ParseMultipartForm(50 << 20); err != nil {
 		log.Println(err)
-		w.Write([]byte("maximum limit of 50 MB execeeded"))
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("maximum limit of 50 MB execeeded"))
 		return
 	}
 	for _, fileHeader := range r.MultipartForm.File["svg-files"] {
@@ -38,8 +38,8 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 			fileHeader.Filename, string(buf[0:bytecount+1]), createdAt, userID)
 		if err != nil {
 			log.Println(err)
-			w.Write([]byte("server error"))
 			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("server error"))
 			return
 		}
 		fileID, err := res.LastInsertId()

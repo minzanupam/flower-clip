@@ -31,8 +31,8 @@ func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs WHERE user_id = ?`, userID)
 	if err != nil {
 		log.Println(err)
-		w.Write([]byte("server error"))
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("server error"))
 		return
 	}
 	var svgs []shared_types.SVG
