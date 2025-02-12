@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"app.flower.clip/src/shared_types"
 	"app.flower.clip/src/templates"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
@@ -21,7 +23,29 @@ func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
 	if userID != 0 {
 		authenticated = true
 	}
-	component := templates.IndexPage(authenticated)
+	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs`)
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte("server error"))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	var svgs []shared_types.SVG
+	for rows.Next() {
+		var svg shared_types.SVG
+		var createdAtString string
+		if err = rows.Scan(&svg.ID, &svg.Name, &svg.File, &createdAtString); err != nil {
+			log.Println(err)
+			continue
+		}
+		svg.CreatedAt, err = time.Parse(time.RFC3339, createdAtString)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		svgs = append(svgs, svg)
+	}
+	component := templates.IndexPage(authenticated, svgs)
 	component.Render(r.Context(), w)
 }
 

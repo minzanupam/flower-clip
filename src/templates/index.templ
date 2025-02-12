@@ -1,6 +1,10 @@
 package templates
 
-templ IndexPage(authenticated bool) {
+import (
+	"app.flower.clip/src/shared_types"
+)
+
+templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 	@BaseHTMX(authenticated) {
 		<h1>Project Flower Clip @ minzify.xyz</h1>
 		<div>
@@ -10,6 +14,11 @@ templ IndexPage(authenticated bool) {
 				</label>
 				<button>upload</button>
 			</form>
+		</div>
+		<div>
+			for _, svg := range svgs {
+				<div>{svg.Name}</div>
+			}
 		</div>
 	}
 }
