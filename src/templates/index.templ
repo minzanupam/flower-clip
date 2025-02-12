@@ -7,8 +7,15 @@ import (
 templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 	@BaseHTMX(authenticated) {
 		<style>
+			.page-heading {
+				font-family: roboto;
+				& .heading-from {
+					font-family: monospace;
+				}
+			}
 			.upload-form {
 				padding: 2rem;
+				visibility: hidden;
 			}
 			.svg-grid {
 				display: grid;
@@ -21,9 +28,20 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					overflow: hidden;
 				}
 			}
+			#uploading-toggle-button {
+				background-color: light-dark(oklch(0.623 0.214 259.815), oklch(0.623 0.214 259.815));	
+				border: 1px solid light-dark(black, white);
+				outline: none;
+				padding: 1rem 2rem;
+				border-radius: 32px;
+				font-weight: bold;
+				font-size: 18px;
+				font-family: monospace;
+			}
 		</style>
-		<h1>Project Flower Clip @ minzify.xyz</h1>
+		<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 		if authenticated {
+			<button id="uploading-toggle-button">+ Start Uploading</button>
 			<div class="upload-form">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="none">
 					<label>
@@ -43,5 +61,16 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		} else {
 			<a href="/login">Please login</a>
 		}
+
+		<script defer>
+			document.getElementById("uploading-toggle-button").addEventListener("click", () => {
+				const visibility = document.querySelector(".upload-form").style.visibility;
+				if (visibility == "hidden") {
+					document.querySelector(".upload-form").style.visibility = "visible";
+				} else {
+					document.querySelector(".upload-form").style.visibility = "hidden";
+				}
+			});
+		</script>
 	}
 }
