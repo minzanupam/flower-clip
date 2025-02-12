@@ -23,6 +23,11 @@ func (s *Service) rootHandler(w http.ResponseWriter, r *http.Request) {
 	if userID != 0 {
 		authenticated = true
 	}
+	if !authenticated {
+		component := templates.IndexPage(false, []shared_types.SVG{})
+		component.Render(r.Context(), w)
+		return
+	}
 	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs WHERE user_id = ?`, userID)
 	if err != nil {
 		log.Println(err)
