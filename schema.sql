@@ -2,7 +2,8 @@ CREATE TABLE users (
 	id INTEGER PRIMARY KEY autoincrement,
 	fullname TEXT NOT NULL,
 	email TEXT NOT NULL UNIQUE,
-	password TEXT NOT NULL
+	password TEXT NOT NULL,
+	created_at TEXT NOT NULL
 );
 
 CREATE TABLE svgs (

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"app.flower.clip/src/templates"
 	"github.com/gorilla/sessions"
@@ -110,7 +111,10 @@ func (s *Service) signupApiHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("server error"))
 		return
 	}
-	res, err := s.DB.Exec(`INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)`, req_fullname, req_email, string(passwordHash))
+	createdAt := time.Now().Format(time.RFC3339)
+	res, err := s.DB.Exec(`INSERT INTO users (fullname, email, password,
+		created_at) VALUES (?, ?, ?, ?)`, req_fullname, req_email,
+		string(passwordHash), createdAt)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusConflict)
