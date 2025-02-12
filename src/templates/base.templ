@@ -47,6 +47,19 @@ templ BaseHTMX(authenticated bool) {
 			} else {
 				<a href="/login" class="underline">login</a>
 			}
+			<button id="color-scheme-changer">color scheme</button>
+			<script defer>
+				document.getElementById("color-scheme-changer").addEventListener("click", ()=>{
+					const colorScheme =document.querySelector(":root").style.colorScheme;
+					if (colorScheme == "light") {
+						document.querySelector(":root").style.colorScheme = "dark";
+					} else if (colorScheme == "dark") {
+						document.querySelector(":root").style.colorScheme = "light dark";
+					} else {
+						document.querySelector(":root").style.colorScheme = "light";
+					}
+				})
+			</script>
 		</nav>
 		{ children... }
 	</body>
