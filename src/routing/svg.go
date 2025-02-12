@@ -3,6 +3,7 @@ package routing
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +21,22 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		log.Println(bytecount)
+		if bytecount == 10<<20 {
+			log.Println("buffer for reading uploaded file is full")
+		}
+		createdAt := time.Now().Format(time.RFC3339)
+		res, err := s.DB.Exec(`INSERT INTO svgs (name, file, created_at) VALUES (?, ?, ?)`, fileHeader.Filename, buf, createdAt)
+		if err != nil {
+			log.Println(err)
+			w.Write([]byte("server error"))
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		fileID, err := res.LastInsertId()
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(fileID)
 		uploadedFile.Close()
 	}
 }
