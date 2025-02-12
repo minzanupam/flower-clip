@@ -15,7 +15,8 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 			}
 			.upload-form {
 				padding: 2rem;
-				visibility: hidden;
+				/* visibility: hidden; */
+				display: none;
 			}
 			.svg-grid {
 				display: grid;
@@ -64,11 +65,17 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 
 		<script defer>
 			document.getElementById("uploading-toggle-button").addEventListener("click", () => {
-				const visibility = document.querySelector(".upload-form").style.visibility;
-				if (visibility == "hidden") {
-					document.querySelector(".upload-form").style.visibility = "visible";
+				// const visibility = document.querySelector(".upload-form").style.visibility;
+				// if (visibility == "hidden") {
+				// 	document.querySelector(".upload-form").style.visibility = "visible";
+				// } else {
+				// 	document.querySelector(".upload-form").style.visibility = "hidden";
+				// }
+				const disp = document.querySelector(".upload-form").style.display;
+				if (!disp || disp == "none") {
+					document.querySelector(".upload-form").style.display = "block";
 				} else {
-					document.querySelector(".upload-form").style.visibility = "hidden";
+					document.querySelector(".upload-form").style.display = "none";
 				}
 			});
 		</script>
