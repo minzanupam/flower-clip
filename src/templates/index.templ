@@ -7,19 +7,24 @@ import (
 templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 	@BaseHTMX(authenticated) {
 		<style>
+			.upload-form {
+				padding: 2rem;
+			}
 			.svg-grid {
 				display: grid;
 				grid-template-columns: repeat(8, 1fr);
+				padding: 2rem;
+				position: relative;
 
 				& .svg-container {
-					max-width: 2rem;
+					max-width: calc(100% - 2rem);
 					overflow: hidden;
 				}
 			}
 		</style>
 		<h1>Project Flower Clip @ minzify.xyz</h1>
 		if authenticated {
-			<div>
+			<div class="upload-form">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="none">
 					<label>
 						upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
@@ -31,7 +36,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				for _, svg := range svgs {
 					<div class="svg-container">
 						@templ.Raw(svg.File)
-						<div>{svg.Name}</div>
+						<div class="svg-name">{svg.Name}</div>
 					</div>
 				}
 			</div>
