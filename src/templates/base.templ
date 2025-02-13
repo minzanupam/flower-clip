@@ -46,6 +46,7 @@ templ BaseHTMX(authenticated bool) {
 		flex-direction: row;
 		justify-content: space-between;
 		padding: 0.5rem;
+		border-bottom: 1px solid black;
 		& * {
 			padding-left: 1rem;
 			padding-right: 1rem;
@@ -53,6 +54,20 @@ templ BaseHTMX(authenticated bool) {
 	}
 	.main-content {
 		padding-left: 2rem;
+	}
+	#profile-drop-down-container {
+	}
+	#profile-drop-down {
+		display: none;
+		position: absolute;
+		background-color: light-dark(#FFF, #222);
+		border: 1px solid #222;
+		right: 0;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 2rem;
+		border-radius: 8px 0px 8px 8px;
+		transform: translate(0, 0.5rem);
 	}
 	</style>
 	</head>
@@ -62,7 +77,23 @@ templ BaseHTMX(authenticated bool) {
 			<div>
 			<button id="color-scheme-changer">color scheme</button>
 			if authenticated {
-				<a href="/profile" class="underline">profile</a>
+				<script defer>
+					function showprofile() {
+						const disp = document.getElementById("profile-drop-down").style.display;
+						if (!disp || disp == "none") {
+							document.getElementById("profile-drop-down").style.display="flex";
+						} else {
+							document.getElementById("profile-drop-down").style.display="none";
+						}
+					}
+				</script>
+				<button onclick="showprofile()">Profile</button>
+				<div id="profile-drop-down-container">
+					<div id="profile-drop-down">
+						<a href="/profile">profile</a>
+						<a href="/logout">logout</a>
+					</div>
+				</div>
 			} else {
 				<a href="/login" class="underline">login</a>
 			}
