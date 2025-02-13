@@ -3,7 +3,12 @@ package routing
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
+
+	"app.flower.clip/src/shared_types"
+	"app.flower.clip/src/templates"
 )
 
 func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +26,7 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("maximum limit of 50 MB execeeded"))
 		return
 	}
+	var idString strings.Builder
 	for _, fileHeader := range r.MultipartForm.File["svg-files"] {
 		uploadedFile, err := fileHeader.Open()
 		// buffer assumed to be 1 MB
@@ -45,8 +51,45 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 		fileID, err := res.LastInsertId()
 		if err != nil {
 			log.Println(err)
+			continue
 		}
-		log.Println(fileID)
 		uploadedFile.Close()
+
+		if idString.Len() == 0 {
+			if _, err = idString.WriteString(strconv.Itoa(int(fileID))); err != nil {
+				log.Println(err)
+			}
+		} else {
+			if _, err = idString.WriteString(","); err != nil {
+				log.Println(err)
+			}
+			if _, err = idString.WriteString(strconv.Itoa(int(fileID))); err != nil {
+				log.Println(err)
+			}
+		}
 	}
+	rows, err := s.DB.Query(`SELECT ID, name, file, created_at FROM svgs WHERE id IN (?)`, idString.String())
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("server error"))
+		return
+	}
+	var svgs []shared_types.SVG
+	for rows.Next() {
+		var svg shared_types.SVG
+		var createdAtString string
+		if err = rows.Scan(&svg.ID, &svg.Name, &svg.File, &createdAtString); err != nil {
+			log.Println(err)
+			continue
+		}
+		svg.CreatedAt, err = time.Parse(time.RFC3339, createdAtString)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		svgs = append(svgs, svg)
+	}
+	component := templates.RenderSvgs(svgs)
+	component.Render(r.Context(), w)
 }

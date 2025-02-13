@@ -53,7 +53,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		if authenticated {
 			<button id="uploading-toggle-button">+ Start Uploading</button>
 			<dialog id="upload-dialog">
-				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="none">
+				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="beforebegin" hx-target=".svg-container">
 					<label>
 						upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
 					</label>
@@ -82,5 +82,15 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				document.getElementById("upload-dialog").close();
 			});
 		</script>
+	}
+}
+
+templ RenderSvgs(svgs []shared_types.SVG) {
+	for _, svg := range svgs {
+		<div class="svg-container">
+			@templ.Raw(svg.File)
+			<div class="svg-name">{svg.Name}</div>
+			<button onclick={ templ.JSFuncCall("navigator.clipboard.writeText", svg.File) }>copy to clipboard</button>
+		</div>
 	}
 }
