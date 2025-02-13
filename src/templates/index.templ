@@ -13,6 +13,14 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					font-family: monospace;
 				}
 			}
+			.header-section {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding-top: 5%;
+				padding-bottom: 5%;
+			}
 			.upload-form {
 				padding: 2rem;
 				display: none;
@@ -52,9 +60,11 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				font-family: monospace;
 			}
 		</style>
-		<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
-		if authenticated {
+		<section class="header-section">
+			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 			<button id="uploading-toggle-button">+ Start Uploading</button>
+		</section>
+		if authenticated {
 			<dialog id="upload-dialog">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="afterbegin" hx-target=".svg-grid">
 					<label>
