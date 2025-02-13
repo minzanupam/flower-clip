@@ -63,7 +63,7 @@ templ BaseHTMX(authenticated bool) {
 			}
 			<script defer>
 				document.getElementById("color-scheme-changer").addEventListener("click", ()=>{
-					const colorScheme =document.querySelector(":root").style.colorScheme;
+					const colorScheme = document.querySelector(":root").style.colorScheme;
 					if (colorScheme == "light") {
 						document.querySelector(":root").style.colorScheme = "dark";
 					} else if (colorScheme == "dark") {
