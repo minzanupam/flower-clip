@@ -45,12 +45,11 @@ templ BaseHTMX(authenticated bool) {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: 0.5rem;
+		padding: 0.25rem;
+		padding-left: 2rem;
+		padding-right: 2rem;
 		border-bottom: 1px solid black;
-		& * {
-			padding-left: 1rem;
-			padding-right: 1rem;
-		}
+		align-items: center;
 	}
 	.main-content {
 		padding-left: 2rem;
@@ -69,34 +68,32 @@ templ BaseHTMX(authenticated bool) {
 		border-radius: 8px 0px 8px 8px;
 		transform: translate(0, 0.5rem);
 	}
+	#user-circle-icon {
+		width: 2rem;
+		height: 2rem;
+	}
+	.nav-right-box {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 2rem;
+	}
 	</style>
 	</head>
 	<body class="font-sans">
 		<nav class="top-nav">
 			<a href="/" class="underline">home</a>
-			<div>
-			<button id="color-scheme-changer">color scheme</button>
-			if authenticated {
-				<script defer>
-					function showprofile() {
-						const disp = document.getElementById("profile-drop-down").style.display;
-						if (!disp || disp == "none") {
-							document.getElementById("profile-drop-down").style.display="flex";
-						} else {
-							document.getElementById("profile-drop-down").style.display="none";
-						}
-					}
-				</script>
-				<button onclick="showprofile()">Profile</button>
-				<div id="profile-drop-down-container">
-					<div id="profile-drop-down">
-						<a href="/profile">profile</a>
-						<a href="/logout">logout</a>
-					</div>
-				</div>
-			} else {
-				<a href="/login" class="underline">login</a>
-			}
+			<div class="nav-right-box">
+				<button id="color-scheme-changer">color scheme</button>
+				if authenticated {
+					<a href="/profile">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" id="user-circle-icon">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+						</svg>
+					</a>
+				} else {
+					<a href="/login" class="underline">login</a>
+				}
 			</div>
 			<script defer>
 				document.getElementById("color-scheme-changer").addEventListener("click", ()=>{
