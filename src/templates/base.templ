@@ -44,8 +44,12 @@ templ BaseHTMX(authenticated bool) {
 		background-color: light-dark(#AAA, #333);
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: space-between;
 		padding: 0.5rem;
+		& * {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
 	}
 	.main-content {
 		padding-left: 2rem;
@@ -55,12 +59,14 @@ templ BaseHTMX(authenticated bool) {
 	<body class="font-sans">
 		<nav class="top-nav">
 			<a href="/" class="underline">home</a>
+			<div>
 			<button id="color-scheme-changer">color scheme</button>
 			if authenticated {
 				<a href="/profile" class="underline">profile</a>
 			} else {
 				<a href="/login" class="underline">login</a>
 			}
+			</div>
 			<script defer>
 				document.getElementById("color-scheme-changer").addEventListener("click", ()=>{
 					const colorScheme = document.querySelector(":root").style.colorScheme;
