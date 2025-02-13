@@ -53,7 +53,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		if authenticated {
 			<button id="uploading-toggle-button">+ Start Uploading</button>
 			<dialog id="upload-dialog">
-				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="beforebegin" hx-target=".svg-container">
+				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="afterbegin" hx-target=".svg-grid">
 					<label>
 						upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
 					</label>
