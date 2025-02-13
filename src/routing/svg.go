@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -68,7 +69,8 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	rows, err := s.DB.Query(`SELECT ID, name, file, created_at FROM svgs WHERE id IN (?)`, idString.String())
+
+	rows, err := s.DB.Query(fmt.Sprintf(`SELECT ID, name, file, created_at FROM svgs WHERE id IN (%s)`, idString.String()))
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -91,5 +93,7 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 		svgs = append(svgs, svg)
 	}
 	component := templates.RenderSvgs(svgs)
-	component.Render(r.Context(), w)
+	if err = component.Render(r.Context(), w); err != nil {
+		log.Println(err)
+	}
 }
