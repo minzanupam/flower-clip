@@ -81,7 +81,7 @@ func StartServer() error {
 	}
 	sessionSecret := os.Getenv("SESSION_SECRET")
 	sessionDb := os.Getenv("SESSION_DB")
-	store, err := sqlitestore.NewSqliteStore(sessionDb, "sessions", "/", 3600, []byte(sessionSecret))
+	store, err := sqlitestore.NewSqliteStore(sessionDb, "sessions", "/", 2592000, []byte(sessionSecret))
 	if err != nil {
 		panic(err)
 	}
