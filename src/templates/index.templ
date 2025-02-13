@@ -52,14 +52,15 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 		if authenticated {
 			<button id="uploading-toggle-button">+ Start Uploading</button>
-			<div class="upload-form">
+			<dialog id="upload-dialog">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="none">
 					<label>
 						upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
 					</label>
 					<button>upload</button>
+					<button id="upload-form-close">close</button>
 				</form>
-			</div>
+			</dialog>
 			<div class="svg-grid">
 				for _, svg := range svgs {
 					<div class="svg-container">
@@ -75,12 +76,10 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 
 		<script defer>
 			document.getElementById("uploading-toggle-button").addEventListener("click", () => {
-				const disp = document.querySelector(".upload-form").style.display;
-				if (!disp || disp == "none") {
-					document.querySelector(".upload-form").style.display = "block";
-				} else {
-					document.querySelector(".upload-form").style.display = "none";
-				}
+				document.getElementById("upload-dialog").showModal();
+			});
+			document.getElementById("upload-form-close").addEventListener("click", () => {
+				document.getElementById("upload-dialog").close();
 			});
 		</script>
 	}
