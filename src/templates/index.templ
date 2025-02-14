@@ -26,12 +26,17 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				padding: 2rem;
 				display: none;
 			}
+			.icon-section {
+				display: flex;
+				justify-content: center;
+			}
 			.svg-grid {
 				display: grid;
 				grid-template-columns: repeat(8, 1fr);
 				padding: 2rem;
 				position: relative;
 				gap: 2rem;
+				max-width: 60%;
 
 				& svg {
 					border: 1px solid light-dark(black, white);
@@ -65,6 +70,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 			<button id="uploading-toggle-button">+ Start Uploading</button>
 		</section>
+		<section class="icon-section">
 		if authenticated {
 			<dialog id="upload-dialog">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="afterbegin" hx-target=".svg-grid">
@@ -96,6 +102,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				document.getElementById("upload-dialog").close();
 			});
 		</script>
+		</section>
 	}
 }
 
