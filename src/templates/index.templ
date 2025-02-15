@@ -48,7 +48,21 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				& .svg-container {
 					width: 72px;
 					overflow: hidden;
-					height: content-height;
+					height: min-content;
+					position: relative;
+				}
+
+				& .copy-svg-btn {
+					width: 65px;
+					position: absolute;
+					top: 24px;
+					height: 40px;
+					border-radius: 12px;
+					opacity: 0.9;
+					border: none;
+					border-radius: 0;
+					outline: none;
+					background-color: none;
 				}
 			}
 			#uploading-toggle-button {
@@ -85,6 +99,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container">
 						@templ.Raw(svg.File)
 						<div class="svg-name">{svg.Name}</div>
+						<button class="copy-svg-btn">click to copy</button>
 					</div>
 				}
 			</div>
@@ -109,6 +124,7 @@ templ RenderSvgs(svgs []shared_types.SVG) {
 		<div class="svg-container">
 			@templ.Raw(svg.File)
 			<div class="svg-name">{svg.Name}</div>
+			<button class="copy-svg-btn">click to copy</button>
 		</div>
 	}
 }
