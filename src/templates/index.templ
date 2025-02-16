@@ -50,19 +50,22 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					overflow: hidden;
 					height: min-content;
 					position: relative;
+					&:hover .copy-svg-btn {
+						visibility: visible;
+					}
 				}
 
 				& .copy-svg-btn {
-					width: 65px;
+					width: 64px;
 					position: absolute;
-					top: 24px;
-					height: 40px;
-					border-radius: 12px;
+					top: 0;
+					left: 0;
+					height: 64px;
 					opacity: 0.9;
 					border: none;
-					border-radius: 0;
+					border-radius: 16px;
 					outline: none;
-					background-color: none;
+					visibility: hidden;
 				}
 			}
 			#uploading-toggle-button {
