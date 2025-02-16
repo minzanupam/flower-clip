@@ -35,21 +35,28 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				flex-wrap: wrap;
 				flex-direction: row;
 				position: relative;
-				width: max(840px,60%);
+				width: max(840px, 80%);
 				gap: 1rem;
 
 				& svg {
+					width: 32px;
+					height: 32px;
+				}
+
+				& .svg-inner-container {
+					width: 128px;
+					height: 128px;
 					border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-700));
-					border-radius: 16px;
-					width: 64px;
-					height: 64px;
+					border-radius: 8px;
+					text-align: center;
+					align-content: center;
+					position: relative;
 				}
 
 				& .svg-container {
-					width: 72px;
+					width: 130px;
 					overflow: hidden;
 					height: min-content;
-					position: relative;
 					&:hover .copy-svg-btn {
 						visibility: visible;
 					}
@@ -57,14 +64,14 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 
 				& .copy-svg-btn {
 					/* not 64x64 but 66 beacause border for the svg takes 1 px */
-					width: 66px;
-					height: 66px;
+					width: 120px;
+					height: 60px;
 					position: absolute;
-					top: 0;
-					left: 0;
+					bottom: 4px;
+					left: 4px;
 					opacity: 0.9;
 					border: none;
-					border-radius: 16px;
+					border-radius: 8px;
 					outline: none;
 					visibility: hidden;
 					color: white;
@@ -104,9 +111,11 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 			<div class="svg-grid">
 				for _, svg := range svgs {
 					<div class="svg-container">
-						@templ.Raw(svg.File)
+						<div class="svg-inner-container">
+							@templ.Raw(svg.File)
+							<button class="copy-svg-btn">copy</button>
+						</div>
 						<div class="svg-name">{svg.Name}</div>
-						<button class="copy-svg-btn">copy</button>
 					</div>
 				}
 			</div>
