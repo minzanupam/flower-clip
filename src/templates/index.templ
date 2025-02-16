@@ -67,6 +67,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					border-radius: 16px;
 					outline: none;
 					visibility: hidden;
+					color: white;
+					font-weight: bold;
+					background-color: gray;
 				}
 			}
 			#uploading-toggle-button {
@@ -103,7 +106,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container">
 						@templ.Raw(svg.File)
 						<div class="svg-name">{svg.Name}</div>
-						<button class="copy-svg-btn">click to copy</button>
+						<button class="copy-svg-btn">copy</button>
 					</div>
 				}
 			</div>
@@ -128,7 +131,7 @@ templ RenderSvgs(svgs []shared_types.SVG) {
 		<div class="svg-container">
 			@templ.Raw(svg.File)
 			<div class="svg-name">{svg.Name}</div>
-			<button class="copy-svg-btn">click to copy</button>
+			<button class="copy-svg-btn">copy</button>
 		</div>
 	}
 }
