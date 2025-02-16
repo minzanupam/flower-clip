@@ -56,11 +56,12 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				}
 
 				& .copy-svg-btn {
-					width: 64px;
+					/* not 64x64 but 66 beacause border for the svg takes 1 px */
+					width: 66px;
+					height: 66px;
 					position: absolute;
 					top: 0;
 					left: 0;
-					height: 64px;
 					opacity: 0.9;
 					border: none;
 					border-radius: 16px;
