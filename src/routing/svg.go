@@ -121,3 +121,43 @@ func (s *Service) deleteSvgHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (s *Service) editPageHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+	}
+	authenticated := false
+	if userID != 0 {
+		authenticated = true
+	}
+	if !authenticated {
+		component := templates.EditPage(false, []shared_types.SVG{})
+		component.Render(r.Context(), w)
+		return
+	}
+	rows, err := s.DB.Query(`SELECT id, name, file, created_at FROM svgs WHERE user_id = ?`, userID)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("server error"))
+		return
+	}
+	var svgs []shared_types.SVG
+	for rows.Next() {
+		var svg shared_types.SVG
+		var createdAtString string
+		if err = rows.Scan(&svg.ID, &svg.Name, &svg.File, &createdAtString); err != nil {
+			log.Println(err)
+			continue
+		}
+		svg.CreatedAt, err = time.Parse(time.RFC3339, createdAtString)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		svgs = append(svgs, svg)
+	}
+	component := templates.IndexPage(authenticated, svgs)
+	component.Render(r.Context(), w)
+}

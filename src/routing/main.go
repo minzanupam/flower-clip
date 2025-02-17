@@ -98,6 +98,7 @@ func StartServer() error {
 	mux.HandleFunc("POST /logout", s.logoutApiHandler)
 	mux.HandleFunc("POST /svg/upload", s.uploadSvgHandler)
 	mux.HandleFunc("POST /svg/delete/{id}", s.deleteSvgHandler)
+	mux.HandleFunc("GET /edit", s.editPageHandler)
 	mux.HandleFunc("GET /", s.rootHandler)
 	log.Println("http://localhost:4000")
 	return http.ListenAndServe(":4000", LoggingMiddleware(mux))

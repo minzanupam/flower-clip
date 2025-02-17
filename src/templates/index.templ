@@ -96,6 +96,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		<section class="header-section">
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 			<button id="uploading-toggle-button">+ Start Uploading</button>
+			<a href="/edit">edit mode</a>
 		</section>
 		<section class="icon-section">
 		if authenticated {
@@ -146,3 +147,138 @@ templ RenderSvgs(svgs []shared_types.SVG) {
 		</div>
 	}
 }
+
+templ EditPage(authenticated bool, svgs []shared_types.SVG) {
+	@BaseHTMX(authenticated) {
+		<style>
+			.page-heading {
+				font-family: roboto, sans-serif;
+				font-size: 36px;
+				& .heading-from {
+					font-family: monospace;
+				}
+			}
+			.header-section {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding-top: 5%;
+				padding-bottom: 5%;
+			}
+			.upload-form {
+				padding: 2rem;
+				display: none;
+			}
+			.icon-section {
+				display: flex;
+				justify-content: center;
+			}
+			.svg-grid {
+				display: flex;
+				flex-wrap: wrap;
+				flex-direction: row;
+				position: relative;
+				width: max(840px, 80%);
+				gap: 1rem;
+
+				& svg {
+					width: 32px;
+					height: 32px;
+				}
+
+				& .svg-inner-container {
+					width: 128px;
+					height: 128px;
+					border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-700));
+					border-radius: 8px;
+					text-align: center;
+					align-content: center;
+					position: relative;
+				}
+
+				& .svg-container {
+					width: 130px;
+					overflow: hidden;
+					height: min-content;
+					&:hover .copy-svg-btn {
+						visibility: visible;
+					}
+				}
+
+				& .copy-svg-btn {
+					/* not 64x64 but 66 beacause border for the svg takes 1 px */
+					width: 120px;
+					height: 60px;
+					position: absolute;
+					bottom: 4px;
+					left: 4px;
+					opacity: 0.9;
+					border: none;
+					border-radius: 8px;
+					outline: none;
+					visibility: hidden;
+					color: white;
+					font-weight: bold;
+					background-color: gray;
+				}
+			}
+			#uploading-toggle-button {
+				--color-blue-300: oklch(0.809 0.105 251.813);
+				--color-blue-400: oklch(0.707 0.165 254.624);
+				--color-blue-500: oklch(0.623 0.214 259.815);				
+				background-color: light-dark(var(--color-blue-300), var(--color-blue-500));	
+				border: 1px solid light-dark(black, white);
+				outline: none;
+				padding: 1rem 2rem;
+				border-radius: 32px;
+				font-weight: bold;
+				font-size: 18px;
+				font-family: monospace;
+			}
+		</style>
+		<section class="header-section">
+			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
+			<button id="uploading-toggle-button">+ Start Uploading</button>
+			<a href="/edit">edit mode</a>
+		</section>
+		<section class="icon-section">
+		if authenticated {
+			<dialog id="upload-dialog">
+				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="afterbegin" hx-target=".svg-grid">
+					<label>
+						upload SVGs <input type="file" multiple accept="image/svg+xml" name="svg-files" />
+					</label>
+					<button>upload</button>
+					<button id="upload-form-close" type="button">close</button>
+				</form>
+			</dialog>
+			<div class="svg-grid">
+				for _, svg := range svgs {
+					<div class="svg-container">
+						<div class="svg-inner-container">
+							@templ.Raw(svg.File)
+							<button class="copy-svg-btn" onclick={
+								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+							}>copy</button>
+						</div>
+						<div class="svg-name">{svg.Name}</div>
+					</div>
+				}
+			</div>
+		} else {
+			<a href="/login">Please login</a>
+		}
+
+		<script defer>
+			document.getElementById("uploading-toggle-button").addEventListener("click", () => {
+				document.getElementById("upload-dialog").showModal();
+			});
+			document.getElementById("upload-form-close").addEventListener("click", () => {
+				document.getElementById("upload-dialog").close();
+			});
+		</script>
+		</section>
+	}
+}
+
