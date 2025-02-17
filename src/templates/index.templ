@@ -2,6 +2,7 @@ package templates
 
 import (
 	"app.flower.clip/src/shared_types"
+	"strconv"
 )
 
 templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
@@ -239,8 +240,7 @@ templ EditPage(authenticated bool, svgs []shared_types.SVG) {
 		</style>
 		<section class="header-section">
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
-			<button id="uploading-toggle-button">+ Start Uploading</button>
-			<a href="/edit">edit mode</a>
+			<a href="/">done</a>
 		</section>
 		<section class="icon-section">
 		if authenticated {
@@ -255,12 +255,10 @@ templ EditPage(authenticated bool, svgs []shared_types.SVG) {
 			</dialog>
 			<div class="svg-grid">
 				for _, svg := range svgs {
-					<div class="svg-container">
+					<div class="svg-container" id={"svg-container-" + strconv.Itoa(svg.ID)}>
 						<div class="svg-inner-container">
 							@templ.Raw(svg.File)
-							<button class="copy-svg-btn" onclick={
-								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
-							}>copy</button>
+							<button hx-post={"/svg/delete/" + strconv.Itoa(svg.ID)} hx-target={"#svg-container-" + strconv.Itoa(svg.ID)} hx-swap="delete"> X </button>
 						</div>
 						<div class="svg-name">{svg.Name}</div>
 					</div>

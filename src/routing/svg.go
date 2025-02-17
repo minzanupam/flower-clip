@@ -158,6 +158,6 @@ func (s *Service) editPageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		svgs = append(svgs, svg)
 	}
-	component := templates.IndexPage(authenticated, svgs)
+	component := templates.EditPage(authenticated, svgs)
 	component.Render(r.Context(), w)
 }
