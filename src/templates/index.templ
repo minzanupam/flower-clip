@@ -113,7 +113,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container">
 						<div class="svg-inner-container">
 							@templ.Raw(svg.File)
-							<button class="copy-svg-btn">copy</button>
+							<button class="copy-svg-btn" onclick={
+								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+							}>copy</button>
 						</div>
 						<div class="svg-name">{svg.Name}</div>
 					</div>
