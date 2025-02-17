@@ -97,3 +97,27 @@ func (s *Service) uploadSvgHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 }
+
+func (s *Service) deleteSvgHandler(w http.ResponseWriter, r *http.Request) {
+	svgID, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("could not parse svg id"))
+		return
+	}
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("login required"))
+		return
+	}
+	_, err = s.DB.Exec(`DELETE FROM svgs WHERE id = ? AND user_id = ?`, svgID, userID)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("failed to delete svg"))
+		return
+	}
+}
