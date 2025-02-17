@@ -97,7 +97,6 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		<section class="header-section">
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
 			<button id="uploading-toggle-button">+ Start Uploading</button>
-			<a href="/edit">edit mode</a>
 		</section>
 		<section class="icon-section">
 		if authenticated {
@@ -258,7 +257,13 @@ templ EditPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container" id={"svg-container-" + strconv.Itoa(svg.ID)}>
 						<div class="svg-inner-container">
 							@templ.Raw(svg.File)
-							<button hx-post={"/svg/delete/" + strconv.Itoa(svg.ID)} hx-target={"#svg-container-" + strconv.Itoa(svg.ID)} hx-swap="delete"> X </button>
+							<button
+							hx-post={"/svg/delete/"
+							+ strconv.Itoa(svg.ID)}
+							hx-target={"#svg-container-"
+							+ strconv.Itoa(svg.ID)}
+							hx-swap="delete"> X
+							</button>
 						</div>
 						<div class="svg-name">{svg.Name}</div>
 					</div>
