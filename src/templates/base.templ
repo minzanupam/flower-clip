@@ -72,11 +72,17 @@ templ BaseHTMX(authenticated bool) {
 		align-items: center;
 		gap: 2rem;
 	}
+	.logo-image {
+		width: 64px;
+		height: 64px;
+	}
 	</style>
 	</head>
 	<body class="font-sans">
 		<nav class="top-nav">
-			<a href="/" class="underline">home</a>
+			<a href="/" class="underline">
+				<img src="assets/wierd-fan-dark.svg" class="logo-image"/>
+			</a>
 			<div class="nav-right-box">
 				<button id="color-scheme-changer">color scheme</button>
 				if authenticated {
