@@ -156,13 +156,16 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 templ RenderSvgs(svgs []shared_types.SVG) {
 	for _, svg := range svgs {
 		<div class="svg-container">
-			@templ.Raw(svg.File)
-			<button class="svg-btn download-svg-btn" onclick={
-				templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
-			}>download</button>
-			<button class="svg-btn copy-svg-btn" onclick={
-				templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
-			}>copy</button>
+			<div class="svg-inner-container">
+				@templ.Raw(svg.File)
+				<button class="svg-btn download-svg-btn" onclick={
+					templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+				}>download</button>
+				<button class="svg-btn copy-svg-btn" onclick={
+					templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+				}>copy</button>
+			</div>
+			<div class="svg-name">{svg.Name}</div>
 		</div>
 	}
 }
