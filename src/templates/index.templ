@@ -74,9 +74,12 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					border-radius: 8px;
 					outline: none;
 					visibility: hidden;
-					color: white;
+					color: light-dark(black, white);
 					font-weight: bold;
-					background-color: gray;
+					background-color: light-dark(lightgray, gray);
+					&:active {
+						background-color: light-dark(gray, lightgray);
+					}
 				}
 			}
 			#uploading-toggle-button {
