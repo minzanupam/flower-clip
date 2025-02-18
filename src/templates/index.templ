@@ -95,7 +95,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 		</style>
 		<section class="header-section">
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
-			<button id="uploading-toggle-button">+ Start Uploading</button>
+			if authenticated {
+				<button id="uploading-toggle-button">+ Start Uploading</button>
+			}
 		</section>
 		<section class="icon-section">
 		if authenticated {
