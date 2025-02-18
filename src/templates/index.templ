@@ -57,18 +57,16 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					width: 130px;
 					overflow: hidden;
 					height: min-content;
-					&:hover .copy-svg-btn {
+					&:hover .svg-btn {
 						visibility: visible;
 					}
 				}
 
-				& .copy-svg-btn {
+				& .svg-btn {
 					/* not 64x64 but 66 beacause border for the svg takes 1 px */
 					width: 120px;
-					height: 60px;
+					height: 58px;
 					position: absolute;
-					bottom: 4px;
-					left: 4px;
 					opacity: 0.9;
 					border: none;
 					border-radius: 8px;
@@ -80,6 +78,14 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					&:active {
 						background-color: light-dark(gray, lightgray);
 					}
+				}
+				& .copy-svg-btn {
+					bottom: 4px;
+					left: 4px;
+				}
+				& .download-svg-btn {
+					top: 4px;
+					left: 4px;
 				}
 			}
 			#uploading-toggle-button {
@@ -118,7 +124,10 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container">
 						<div class="svg-inner-container">
 							@templ.Raw(svg.File)
-							<button class="copy-svg-btn" onclick={
+							<button class="svg-btn download-svg-btn" onclick={
+								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+							}>download</button>
+							<button class="svg-btn copy-svg-btn" onclick={
 								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
 							}>copy</button>
 						</div>
@@ -146,8 +155,12 @@ templ RenderSvgs(svgs []shared_types.SVG) {
 	for _, svg := range svgs {
 		<div class="svg-container">
 			@templ.Raw(svg.File)
-			<div class="svg-name">{svg.Name}</div>
-			<button class="copy-svg-btn">copy</button>
+			<button class="svg-btn download-svg-btn" onclick={
+				templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+			}>download</button>
+			<button class="svg-btn copy-svg-btn" onclick={
+				templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
+			}>copy</button>
 		</div>
 	}
 }
