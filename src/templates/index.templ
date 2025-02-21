@@ -106,6 +106,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				font-size: 18px;
 				font-family: monospace;
 			}
+			.icon-search-container {
+				padding: 2rem;
+			}
 		</style>
 		<section class="header-section">
 			<h1 class="page-heading">Project Flower Clip &#64; <span class="heading-from">minzify.xyz</span></h1>
@@ -113,8 +116,15 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				<button id="uploading-toggle-button">+ Start Uploading</button>
 			}
 		</section>
-		<section class="icon-section">
 		if authenticated {
+		<search class="icon-search-container">
+			<form>
+				<label>Find Your Icons</label>
+				<input type="search" name="svg-search" />
+				<button>search</button>
+			</form>
+		</search>
+		<section class="icon-section">
 			<dialog id="upload-dialog">
 				<form hx-post="/svg/upload" hx-encoding="multipart/form-data" hx-swap="afterbegin" hx-target=".svg-grid">
 					<label>
@@ -140,10 +150,7 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					</div>
 				}
 			</div>
-		} else {
-			<a href="/login">Please login</a>
-		}
-
+		</section>
 		<script defer>
 			document.getElementById("uploading-toggle-button").addEventListener("click", () => {
 				document.getElementById("upload-dialog").showModal();
@@ -152,7 +159,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 				document.getElementById("upload-dialog").close();
 			});
 		</script>
-		</section>
+		} else {
+			<a href="/login">Please login</a>
+		}
 	}
 }
 
