@@ -163,5 +163,26 @@ func (s *Service) editPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Service) downloadSvgHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("work in progress"))
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("failed to parse svg id"))
+		return
+	}
+	userID, err := authenticate(r, s.Store)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("login required"))
+	}
+	row := s.DB.QueryRow(`SELECT file FROM svgs WHERE id = ? AND user_id = ?`, id, userID)
+	var svg_file string
+	if err = row.Scan(&svg_file); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("file not found"))
+	}
+	w.Header().Set("Content-Type", "image/svg")
+	w.Write([]byte(svg_file))
 }
