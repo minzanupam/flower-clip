@@ -161,3 +161,7 @@ func (s *Service) editPageHandler(w http.ResponseWriter, r *http.Request) {
 	component := templates.EditPage(authenticated, svgs)
 	component.Render(r.Context(), w)
 }
+
+func (s *Service) downloadSvgHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("work in progress"))
+}

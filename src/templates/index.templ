@@ -2,6 +2,7 @@ package templates
 
 import (
 	"app.flower.clip/src/shared_types"
+	"strconv"
 )
 
 templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
@@ -73,10 +74,12 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					outline: none;
 					visibility: hidden;
 					color: light-dark(black, white);
-					font-weight: bold;
 					background-color: light-dark(lightgray, gray);
 					font-family: roboto, sans-serif;
 					font-weight: 500;
+					font-size: 14px;
+					align-content: center;
+					text-decoration: none;
 					&:active {
 						background-color: light-dark(gray, lightgray);
 					}
@@ -126,9 +129,9 @@ templ IndexPage(authenticated bool, svgs []shared_types.SVG) {
 					<div class="svg-container">
 						<div class="svg-inner-container">
 							@templ.Raw(svg.File)
-							<button class="svg-btn download-svg-btn" onclick={
-								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
-							}>download</button>
+							<a class="svg-btn download-svg-btn" href={templ.URL("/svg/download/" +  strconv.Itoa(svg.ID))}>
+								download
+							</a>
 							<button class="svg-btn copy-svg-btn" onclick={
 								templ.JSFuncCall("navigator.clipboard.writeText", svg.File)
 							}>copy</button>
